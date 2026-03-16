@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhon's Barber Design System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'var(--background)',
+                        foreground: 'var(--foreground)',
+                        card: 'var(--card)',
+                        'card-foreground': 'var(--card-foreground)',
+                        primary: {
+                            DEFAULT: 'hsl(23, 100%, 58%)',
+                            foreground: 'hsl(0, 0%, 100%)',
+                        },
+                        secondary: {
+                            DEFAULT: 'var(--secondary)',
+                            foreground: 'var(--secondary-foreground)',
+                        },
+                        muted: {
+                            DEFAULT: 'var(--muted)',
+                            foreground: 'var(--muted-foreground)',
+                        },
+                        gold: {
+                            light: '#FDE047',
+                            DEFAULT: '#EAB308',
+                            dark: '#A16207',
+                        },
+                        border: 'var(--border)',
+                        input: 'var(--input)',
+                        ring: 'hsl(23, 100%, 58%)',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: '1.125rem',
+                        sm: 'calc(1.125rem - 4px)',
+                    },
+                    keyframes: {
+                        'slide-up': {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'success-pop': {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '50%': { transform: 'scale(1.1)', opacity: '1' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        }
+                    },
+                    animation: {
+                        'slide-up': 'slide-up 0.4s ease-out forwards',
+                        'fade-in': 'fade-in 0.4s ease-out forwards',
+                        'success-pop': 'success-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --background: hsl(0, 0%, 97%);
+            --foreground: hsl(0, 0%, 10%);
+            --card: hsl(0, 0%, 100%);
+            --card-foreground: hsl(0, 0%, 10%);
+            --secondary: hsl(0, 0%, 96%);
+            --secondary-foreground: hsl(0, 0%, 10%);
+            --muted: hsl(0, 0%, 96%);
+            --muted-foreground: hsl(0, 0%, 42%);
+            --border: hsl(0, 0%, 90%);
+            --input: hsl(0, 0%, 95%);
+        }
+
+        .dark {
+            --background: hsl(0, 0%, 4%);
+            --foreground: hsl(0, 0%, 96%);
+            --card: hsl(0, 0%, 8%);
+            --card-foreground: hsl(0, 0%, 96%);
+            --secondary: hsl(0, 0%, 12%);
+            --secondary-foreground: hsl(0, 0%, 96%);
+            --muted: hsl(0, 0%, 12%);
+            --muted-foreground: hsl(0, 0%, 60%);
+            --border: hsl(0, 0%, 16%);
+            --input: hsl(0, 0%, 10%);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hide scrollbar for clean look */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased transition-colors duration-300 font-sans">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 w-full z-50 glass border-b border-border px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <i data-lucide="scissors" class="text-white w-4 h-4"></i>
+            </div>
+            <span class="font-serif font-bold text-lg">Jhon's Barber</span>
+        </div>
+        <button id="theme-toggle-mobile" class="p-2 rounded-full bg-secondary text-foreground">
+            <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+            <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+        </button>
+    </header>
+
+    <div class="flex min-h-screen pt-[72px] lg:pt-0">
+        
+        <!-- Desktop Sidebar -->
+        <aside class="hidden lg:flex flex-col w-72 fixed h-screen border-r border-border bg-card z-40">
+            <div class="p-8 border-b border-border flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
+                        <i data-lucide="scissors" class="text-white w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-serif font-bold text-xl leading-none">Jhon's Barber</h1>
+                        <p class="text-[10px] text-muted-foreground uppercase tracking-widest mt-1 font-semibold">Design System</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto p-6 space-y-2">
+                <a href="#hero" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary transition-colors font-medium text-sm text-muted-foreground hover:text-foreground">
+                    <i data-lucide="home" class="w-4 h-4"></i> Overview
+                </a>
+                <a href="#typography" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary transition-colors font-medium text-sm text-muted-foreground hover:text-foreground">
+                    <i data-lucide="type" class="w-4 h-4"></i> Typography
+                </a>
+                <a href="#colors" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary transition-colors font-medium text-sm text-muted-foreground hover:text-foreground">
+                    <i data-lucide="palette" class="w-4 h-4"></i> Colors
+                </a>
+                <a href="#components" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary transition-colors font-medium text-sm text-muted-foreground hover:text-foreground">
+                    <i data-lucide="layers" class="w-4 h-4"></i> Components
+                </a>
+                <a href="#layout" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary transition-colors font-medium text-sm text-muted-foreground hover:text-foreground">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i> Layout
+                </a>
+            </nav>
+
+            <div class="p-6 border-t border-border">
+                <button id="theme-toggle-desktop" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary text-foreground font-medium text-sm hover:bg-secondary/80 transition-colors">
+                    <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                    <span class="dark:hidden">Dark Mode</span>
+                    <span class="hidden dark:inline">Light Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-72 p-6 lg:p-12 max-w-[1200px] mx-auto w-full pb-32 lg:pb-12">
+            
+            <!-- Hero Section -->
+            <section id="hero" class="animate-fade-in mb-20">
+                <div class="relative rounded-[32px] overflow-hidden bg-zinc-950 p-8 lg:p-16 shadow-2xl border border-white/10 group">
+                    <div class="absolute inset-0 z-0">
+                        <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop" alt="Barbershop" class="w-full h-full object-cover opacity-30 grayscale mix-blend-overlay transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent"></div>
+                    </div>
+                    <div class="relative z-10 max-w-2xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Official Documentation</span>
+                        </div>
+                        <h1 class="text-4xl lg:text-6xl font-serif font-black text-white leading-tight mb-6">
+                            Crafting the <span class="text-primary italic">Modern</span> Traditional.
+                        </h1>
+                        <p class="text-white/70 text-lg font-medium mb-8 leading-relaxed max-w-xl">
+                            The design system for Jhon's Barber. A living document combining old-school barbershop elegance with modern tech interfaces.
+                        </p>
+                        <div class="flex gap-4">
+                            <a href="#components" class="px-8 py-4 rounded-DEFAULT bg-primary text-white font-bold text-sm shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:bg-primary/90 transition-all active:scale-95">
+                                View Components
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Typography Section -->
+            <section id="typography" class="mb-20 animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-serif font-bold mb-2">Typography</h2>
+                    <p class="text-muted-foreground">The perfect balance between elegant serif headings and clean sans-serif body text.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div class="bg-card border border-border rounded-[24px] p-8 shadow-sm">
+                        <div class="mb-6 pb-6 border-b border-border">
+                            <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Headings (Serif)</p>
+                            <h3 class="text-2xl font-serif">Playfair Display</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">H1 - 4xl / Black</span>
+                                <h1 class="text-4xl font-serif font-black mt-1">The quick brown fox</h1>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">H2 - 3xl / Bold</span>
+                                <h2 class="text-3xl font-serif font-bold mt-1">The quick brown fox</h2>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">H3 - 2xl / Bold Italic</span>
+                                <h3 class="text-2xl font-serif font-bold italic mt-1">The quick brown fox</h3>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">H4 - xl / Semibold</span>
+                                <h4 class="text-xl font-serif font-semibold mt-1">The quick brown fox</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card border border-border rounded-[24px] p-8 shadow-sm">
+                        <div class="mb-6 pb-6 border-b border-border">
+                            <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Body & UI (Sans-serif)</p>
+                            <h3 class="text-2xl font-sans font-bold">Poppins</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">Large - lg / Medium</span>
+                                <p class="text-lg font-medium mt-1">The quick brown fox jumps over the lazy dog.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">Base - base / Regular</span>
+                                <p class="text-base mt-1">The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">Small - sm / Medium</span>
+                                <p class="text-sm font-medium mt-1">The quick brown fox jumps over the lazy dog.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-muted-foreground uppercase tracking-wider">Micro - xs / Bold Uppercase</span>
+                                <p class="text-xs font-bold uppercase tracking-wider mt-1">The quick brown fox</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Colors Section -->
+            <section id="colors" class="mb-20 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-serif font-bold mb-2">Color Palette</h2>
+                    <p class="text-muted-foreground">High contrast, elegant gold tones, and a vibrant orange accent.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <!-- Primary -->
+                    <div class="group">
+                        <div class="h-32 rounded-[20px] bg-primary shadow-lg shadow-primary/20 mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Primary Accent</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">HSL(23, 100%, 58%)</p>
+                        <p class="text-xs text-muted-foreground font-mono">#FF7A28</p>
+                    </div>
+                    <!-- Background Light -->
+                    <div class="group">
+                        <div class="h-32 rounded-[20px] bg-[#F7F7F7] border border-border shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Background (Light)</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">HSL(0, 0%, 97%)</p>
+                        <p class="text-xs text-muted-foreground font-mono">#F7F7F7</p>
+                    </div>
+                    <!-- Background Dark -->
+                    <div class="group">
+                        <div class="h-32 rounded-[20px] bg-[#0A0A0A] border border-white/10 shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Background (Dark)</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">HSL(0, 0%, 4%)</p>
+                        <p class="text-xs text-muted-foreground font-mono">#0A0A0A</p>
+                    </div>
+                    <!-- Foreground -->
+                    <div class="group">
+                        <div class="h-32 rounded-[20px] bg-[#1A1A1A] shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Foreground Text</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">HSL(0, 0%, 10%)</p>
+                        <p class="text-xs text-muted-foreground font-mono">#1A1A1A</p>
+                    </div>
+                </div>
+
+                <h4 class="font-serif font-bold text-xl mb-4 mt-12">Gold Tones</h4>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="group">
+                        <div class="h-24 rounded-[20px] bg-gold-light shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Gold Light</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">#FDE047</p>
+                    </div>
+                    <div class="group">
+                        <div class="h-24 rounded-[20px] bg-gold shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Gold Default</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">#EAB308</p>
+                    </div>
+                    <div class="group">
+                        <div class="h-24 rounded-[20px] bg-gold-dark shadow-sm mb-3 transition-transform group-hover:-translate-y-1"></div>
+                        <h4 class="font-bold text-sm">Gold Dark</h4>
+                        <p class="text-xs text-muted-foreground font-mono mt-1">#A16207</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Components Section -->
+            <section id="components" class="mb-20 animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-serif font-bold mb-2">Components</h2>
+                    <p class="text-muted-foreground">Interactive elements featuring the signature 1.125rem border radius.</p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="bg-card border border-border rounded-[24px] p-8 shadow-sm mb-8">
+                    <h3 class="text-lg font-bold mb-6">Buttons</h3>
+                    <div class="flex flex-wrap gap-6 items-center">
+                        <button class="px-8 py-3.5 rounded-DEFAULT bg-primary text-white font-bold text-sm shadow-[0_4px_15px_rgba(249,115,22,0.3)] hover:bg-primary/90 hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)] active:scale-95 transition-all">
+                            Primary Action
+                        </button>
+                        <button class="px-8 py-3.5 rounded-DEFAULT bg-secondary text-foreground font-bold text-sm hover:bg-secondary/80 active:scale-95 transition-all">
+                            Secondary Action
+                        </button>
+                        <button class="px-8 py-3.5 rounded-DEFAULT bg-transparent border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white active:scale-95 transition-all">
+                            Outline Button
+                        </button>
+                        <button class="px-8 py-3.5 rounded-DEFAULT bg-transparent text-muted-foreground font-bold text-sm hover:text-foreground hover:bg-secondary/50 active:scale-95 transition-all">
+                            Ghost Button
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Elements -->
+                <div class="bg-card border border-border rounded-[24px] p-8 shadow-sm mb-8">
+                    <h3 class="text-lg font-bold mb-6">Form Elements</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-foreground uppercase tracking-wider ml-1">Full Name</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"></i>
+                                <input type="text" placeholder="John Doe" class="w-full bg-input rounded-DEFAULT py-3.5 pl-12 pr-4 text-sm font-medium border border-transparent focus:border-primary focus:bg-card focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted-foreground/60">
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-foreground uppercase tracking-wider ml-1">Service Search</label>
+                            <div class="relative">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"></i>
+                                <input type="text" placeholder="Find a service..." class="w-full bg-input rounded-full py-3.5 pl-12 pr-4 text-sm font-medium border border-transparent focus:border-primary focus:bg-card focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted-foreground/60">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Service Card -->
+                    <div class="bg-card border border-border rounded-[24px] p-6 shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i data-lucide="scissors" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-lg font-bold text-foreground">R$ 45</span>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1">Corte Clássico</h4>
+                        <p class="text-sm text-muted-foreground mb-4">Corte tradicional na tesoura ou máquina com acabamento perfeito.</p>
+                        <div class="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                            <i data-lucide="clock" class="w-4 h-4"></i> 45 min
+                        </div>
+                    </div>
+
+                    <!-- Appointment Card -->
+                    <div class="bg-card border border-border rounded-[24px] p-6 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-primary"></div>
+                        <div class="flex justify-between items-start mb-4 pl-2">
+                            <div>
+                                <p class="text-xs font-bold text-primary uppercase tracking-wider mb-1">Confirmado</p>
+                                <h4 class="text-lg font-bold">Corte & Barba</h4>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-bold">14:30</p>
+                                <p class="text-xs text-muted-foreground font-medium">Hoje</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 pl-2 pt-4 border-t border-border/50">
+                            <div class="w-8 h-8 rounded-full bg-secondary overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop" alt="Barber" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold">Lucas Silva</p>
+                                <p class="text-xs text-muted-foreground">Barbeiro Sênior</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Layout & Navigation -->
+            <section id="layout" class="mb-20 animate-slide-up" style="animation-delay: 0.4s;">
+                <div class="mb-10">
+                    <h2 class="text-3xl font-serif font-bold mb-2">Layout & Navigation</h2>
+                    <p class="text-muted-foreground">Grid systems and responsive navigation patterns.</p>
+                </div>
+
+                <!-- Bottom Nav Mockup -->
+                <div class="mb-8">
+                    <h3 class="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Mobile Bottom Navigation</h3>
+                    <div class="max-w-md mx-auto bg-background border border-border rounded-t-3xl rounded-b-[40px] shadow-2xl overflow-hidden relative h-32 flex items-end">
+                        <!-- Mock content area -->
+                        <div class="absolute inset-0 bg-secondary/30"></div>
+                        
+                        <!-- The Nav -->
+                        <nav class="w-full bg-card border-t border-border px-6 py-4 rounded-t-3xl relative z-10 flex justify-between items-center">
+                            <button class="relative flex flex-col items-center justify-center p-2 group">
+                                <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-[0_4px_15px_rgba(249,115,22,0.3)] text-white">
+                                    <i data-lucide="home" class="w-6 h-6"></i>
+                                </div>
+                                <div class="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary"></div>
+                            </button>
+                            <button class="relative flex flex-col items-center justify-center p-2 text-muted-foreground hover:text-foreground transition-colors">
+                                <i data-lucide="calendar" class="w-6 h-6"></i>
+                            </button>
+                            <button class="relative flex flex-col items-center justify-center p-2 text-muted-foreground hover:text-foreground transition-colors">
+                                <i data-lucide="scissors" class="w-6 h-6"></i>
+                            </button>
+                            <button class="relative flex flex-col items-center justify-center p-2 text-muted-foreground hover:text-foreground transition-colors">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Grid System -->
+                <div>
+                    <h3 class="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">12-Column Grid (Desktop)</h3>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-8 bg-primary/10 border border-primary/20 rounded-xl p-4 text-center text-primary font-mono text-xs font-bold">col-span-8</div>
+                        <div class="col-span-12 md:col-span-4 bg-primary/10 border border-primary/20 rounded-xl p-4 text-center text-primary font-mono text-xs font-bold">col-span-4</div>
+                        
+                        <div class="col-span-4 bg-secondary border border-border rounded-xl p-4 text-center text-muted-foreground font-mono text-xs font-bold hidden md:block">col-span-4</div>
+                        <div class="col-span-4 bg-secondary border border-border rounded-xl p-4 text-center text-muted-foreground font-mono text-xs font-bold hidden md:block">col-span-4</div>
+                        <div class="col-span-4 bg-secondary border border-border rounded-xl p-4 text-center text-muted-foreground font-mono text-xs font-bold hidden md:block">col-span-4</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Nav for the Documentation itself -->
+    <nav class="lg:hidden fixed bottom-0 w-full z-50 glass border-t border-border px-6 py-4 pb-safe flex justify-between items-center rounded-t-3xl">
+        <a href="#hero" class="p-2 text-primary flex flex-col items-center gap-1">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </a>
+        <a href="#typography" class="p-2 text-muted-foreground hover:text-foreground flex flex-col items-center gap-1">
+            <i data-lucide="type" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">Type</span>
+        </a>
+        <a href="#colors" class="p-2 text-muted-foreground hover:text-foreground flex flex-col items-center gap-1">
+            <i data-lucide="palette" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">Colors</span>
+        </a>
+        <a href="#components" class="p-2 text-muted-foreground hover:text-foreground flex flex-col items-center gap-1">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">Comps</span>
+        </a>
+    </nav>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        const html = document.documentElement;
+        const toggleBtnMobile = document.getElementById('theme-toggle-mobile');
+        const toggleBtnDesktop = document.getElementById('theme-toggle-desktop');
+
+        function toggleTheme() {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check local storage or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.add('light');
+        }
+
+        toggleBtnMobile.addEventListener('click', toggleTheme);
+        toggleBtnDesktop.addEventListener('click', toggleTheme);
+
+        // Simple active state for mobile nav
+        const navLinks = document.querySelectorAll('nav.fixed.bottom-0 a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.forEach(l => {
+                    l.classList.remove('text-primary');
+                    l.classList.add('text-muted-foreground');
+                });
+                link.classList.remove('text-muted-foreground');
+                link.classList.add('text-primary');
+            });
+        });
+    </script>
+</body>
+</html>
